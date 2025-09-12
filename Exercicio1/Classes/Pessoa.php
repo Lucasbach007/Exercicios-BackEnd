@@ -9,4 +9,6 @@ function _cosntruct($nome, $idade, $peso, $altura){
     $this->peso=$peso;
    
 }
+$ps1 = new Pessoa ();
+
 }
