@@ -5,8 +5,10 @@ use Inertia\Inertia;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\UsuarioController;
 //rota produtos
-Route::get('produtos',[ProdutoController::class, 'index']
-);
+//Route::get('produtos',[ProdutoController::class, 'index']);
+// ✅ rotas completas do CRUD de produtos
+Route::resource('produtos', ProdutoController::class);
+
 //rota usuarios
 Route::get('usuarios',[UsuarioController::class, 'index']);
 
