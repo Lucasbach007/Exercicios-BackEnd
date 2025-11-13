@@ -1,7 +1,8 @@
 
 <h1>Lista de Produtos</h1>
 
-<a href="{{ route('produtos.create') }}">Adicionar Novo Produto</a>
+<a href="{{ route('produtos.cphp artisan route:list
+reate') }}">Adicionar Novo Produto</a>
 
 @if(session('success'))
     <div>{{ session('success') }}</div>
@@ -11,7 +12,7 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Nome do Produto</th>
+            <th>Nome do Produto</th>a
             <th>Descrição</th>
             <th>Preço</th>
             <th>Ações</th>
@@ -36,3 +37,7 @@
         @endforeach
     </tbody>
 </table>
+<a href ="{{ route('home') }}">Voltar para a página inicial
+    </a>
+<a href="{{ route(' produtos.create') }}">Adicionar Novo Produto</a>
+<a href ="{{ route('produto.edit',$produto->id) }}">editar</a>
