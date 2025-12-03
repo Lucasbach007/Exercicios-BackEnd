@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    protected $table= 'listaprod';
+protected $fillable = ['id','nome_produto', 'descricao', 'preco'];
     /**
      * Run the migrations.
      */
@@ -13,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
+            $table->string('nome_produto');
+            $table->text('descricao')->nullable();
+            $table->decimal('preco', 8, 2);
             $table->timestamps();
         });
     }
