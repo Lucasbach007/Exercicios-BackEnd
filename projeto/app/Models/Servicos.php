@@ -14,4 +14,9 @@ class Servicos extends Model
         'preco'
     ];
         use HasFactory;
+
+        public function profissionais()
+{
+    return $this->belongsToMany(Profissional::class, 'profissional_servico');
+}
 }
