@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $table= 'listaprod';
+    protected $table= 'produtos';
 protected $fillable = ['id','nome_produto', 'descricao', 'preco'];
     /**
      * Run the migrations.

@@ -1,16 +1,20 @@
-<?php
+<?php 
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\ServicoController;
+use App\Http\Controllers\Api\ProdutoController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ServicosController;
-use App\Models\Servicos;
-use App\Http\Controllers\ProdutoController;
-use App\Http\Controllers\UsuarioController;
 
-Route::apiResource('/servicos', ServicosController::class);
-Route::apiResource('/produtos', ProdutoController::class);
-Route::apiResource('/usuarios', UsuarioController::class);
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+//  Públicas
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
+// Protegidas com Sanctum
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    //Route::apiResource('servicos', ServicoController::class);
+    //Route::apiResource('produtos', ProdutoController::class);
+});

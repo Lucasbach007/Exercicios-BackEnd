@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Servico;
+use APP\Models\AgendamentoServico;
 
-class profissional extends Model
+class Profissional extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProfissionalFactory> */
     use HasFactory;
 
   protected $table = 'profissionais';
@@ -26,7 +26,7 @@ class profissional extends Model
 }
   public function agendamentos()
     {
-        return $this->hasMany(agendamento_servico::class);
+        return $this->hasMany(AgendamentoServico::class);
     }
 
 }
