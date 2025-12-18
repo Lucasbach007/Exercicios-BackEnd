@@ -1,46 +1,52 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Servicos;
 use Illuminate\Http\Request;
-use App\Model\App\Models\Servicos;
-use App\Models\Servicos as ModelsServicos;
 
 class ServicoController extends Controller
 {
-    
     public function index()
     {
-      return ModelsServicos::all();
+        return response()->json(Servicos::all());
     }
 
-  
     public function store(Request $request)
     {
-        $servico = ModelsServicos::create($request->all());
-        return response()->json($servico,201);
+        $data = $request->validate([
+            'nome' => 'required|string|max:255',
+            'descricao' => 'nullable|string',
+            'preco' => 'required|numeric|min:0'
+        ]);
+
+        $servico = Servicos::create($data);
+
+        return response()->json($servico, 201);
     }
 
-    public function show(string $id)
+    public function show(Servicos $servico)
     {
-        return ModelsServicos::findorfail($id);
+        return response()->json($servico);
     }
 
-   
-    public function update(Request $request, string $id)
+    public function update(Request $request, Servicos $servico)
     {
-          $servico = ModelsServicos::findOrFail($id);
-        $servico->update($request->all());
+        $data = $request->validate([
+            'nome' => 'sometimes|required|string|max:255',
+            'descricao' => 'nullable|string',
+            'preco' => 'sometimes|required|numeric|min:0'
+        ]);
+
+        $servico->update($data);
 
         return response()->json($servico);
     }
 
-
-    public function destroy(string $id)
+    public function destroy(Servicos $servico)
     {
-        ModelsServicos::findOrFail($id)->delete();
+        $servico->delete();
 
-        return response()->json(['message' => 'Servico deletado']);
+        return response()->json(null, 204);
     }
 }

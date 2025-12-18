@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -8,34 +7,53 @@ use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
 {
+    // GET /api/produtos
     public function index()
     {
-        return Produto::all(); // JSON automático
+        return response()->json(Produto::all());
     }
 
+    // POST /api/produtos
     public function store(Request $request)
     {
-        $produto = Produto::create($request->all());
+        $data = $request->validate([
+            'nome' => 'required|string|max:255',
+            'descricao' => 'nullable|string',
+            'preco' => 'required|numeric|min:0',
+            'estoque' => 'required|integer|min:0'
+        ]);
+
+        $produto = Produto::create($data);
+
         return response()->json($produto, 201);
     }
 
-    public function show($id)
+    // GET /api/produtos/{id}
+    public function show(Produto $produto)
     {
-        return Produto::findOrFail($id);
+        return response()->json($produto);
     }
 
-    public function update(Request $request, $id)
+    // PUT /api/produtos/{id}
+    public function update(Request $request, Produto $produto)
     {
-        $produto = Produto::findOrFail($id);
-        $produto->update($request->all());
+        $data = $request->validate([
+            'nome' => 'sometimes|required|string|max:255',
+            'descricao' => 'nullable|string',
+            'preco' => 'sometimes|required|numeric|min:0',
+            'estoque' => 'sometimes|required|integer|min:0'
+        ]);
+
+        $produto->update($data);
 
         return response()->json($produto);
     }
 
-    public function destroy($id)
+    // DELETE /api/produtos/{id}
+    public function destroy(Produto $produto)
     {
-        Produto::findOrFail($id)->delete();
+        $produto->delete();
 
-        return response()->json(['message' => 'Produto deletado']);
+        return response()->json(null, 204);
     }
 }
