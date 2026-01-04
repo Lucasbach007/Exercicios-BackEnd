@@ -17,8 +17,17 @@ class ServicoController extends Controller
         $data = $request->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
-            'preco' => 'required|numeric|min:0'
+            'preco' => 'required|numeric|min:0',
+            'duracao_minutos' => 'nullable|integer|min:0',
+            'imagem' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        // Se houver imagem, processar upload
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $caminho = $imagem->store('servicos', 'public');
+            $data['imagem'] = $caminho;
+        }
 
         $servico = Servico::create($data);
 
@@ -35,8 +44,17 @@ class ServicoController extends Controller
         $data = $request->validate([
             'nome' => 'sometimes|required|string|max:255',
             'descricao' => 'nullable|string',
-            'preco' => 'sometimes|required|numeric|min:0'
+            'preco' => 'sometimes|required|numeric|min:0',
+            'duracao_minutos' => 'nullable|integer|min:0',
+            'imagem' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        // Se houver imagem, processar upload
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $caminho = $imagem->store('servicos', 'public');
+            $data['imagem'] = $caminho;
+        }
 
         $servico->update($data);
 

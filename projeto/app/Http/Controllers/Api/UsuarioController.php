@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Model\App\Models\Usuarios;
-use App\Models\Usuarios as ModelsUsuarios;
+use App\Model\Usuarios;
+use Illuminate\Support\Facades\Storage;
+
 
 class UsuarioController extends Controller
 {
@@ -14,7 +15,7 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        return ModelsUsuarios::all();
+        return Usuarios::all();
     }
 
     /**
@@ -22,7 +23,7 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        $usuario = ModelsUsuarios::create($request->all());
+        $usuario = Usuarios::create($request->all());
         return response()->json($usuario,201);
          
        
@@ -32,7 +33,7 @@ class UsuarioController extends Controller
      */
     public function show(string $id)
     {
-     return ModelsUsuarios::findorfail($id);
+     return Usuarios::findorfail($id);
     }
 
     /**
@@ -40,7 +41,7 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $usuario = ModelsUsuarios::findorfail($id);
+        $usuario = Usuarios::findorfail($id);
         $usuario->update($request->all());
 
         return response()->json($usuario);
@@ -51,7 +52,27 @@ class UsuarioController extends Controller
      */
     public function destroy(string $id)
     {
-        ModelsUsuarios::findOrFail($id)->delete();
+        Usuarios::findOrFail($id)->delete();
         return response()->json(['message' => 'Este Usuario/a foi deletado']);
     }
+
+public function uploadFoto(Request $request, $id)
+{
+    $request->validate([
+        'foto' => 'required|image|max:2048'
+    ]);
+
+    $usuario = Usuarios::findOrFail($id);
+
+    if ($usuario->foto) {
+        Storage::disk('public')->delete($usuario->foto);
+    }
+
+    $path = $request->file('foto')->store('usuarios', 'public');
+
+    $usuario->foto = $path;
+    $usuario->save();
+
+    return response()->json($usuario);
+}
 }

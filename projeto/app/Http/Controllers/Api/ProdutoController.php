@@ -20,8 +20,20 @@ class ProdutoController extends Controller
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
             'preco' => 'required|numeric|min:0',
-            'estoque' => 'required|integer|min:0'
+            'estoque' => 'required|integer|min:0',
+            'imagem' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        // Mapear 'nome' para 'nome_produto'
+        $data['nome_produto'] = $data['nome'];
+        unset($data['nome']);
+
+        // Se houver imagem, processar upload
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $caminho = $imagem->store('produtos', 'public');
+            $data['imagem'] = $caminho;
+        }
 
         $produto = Produto::create($data);
 
@@ -41,8 +53,22 @@ class ProdutoController extends Controller
             'nome' => 'sometimes|required|string|max:255',
             'descricao' => 'nullable|string',
             'preco' => 'sometimes|required|numeric|min:0',
-            'estoque' => 'sometimes|required|integer|min:0'
+            'estoque' => 'sometimes|required|integer|min:0',
+            'imagem' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        // Mapear 'nome' para 'nome_produto'
+        if (isset($data['nome'])) {
+            $data['nome_produto'] = $data['nome'];
+            unset($data['nome']);
+        }
+
+        // Se houver imagem, processar upload
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $caminho = $imagem->store('produtos', 'public');
+            $data['imagem'] = $caminho;
+        }
 
         $produto->update($data);
 

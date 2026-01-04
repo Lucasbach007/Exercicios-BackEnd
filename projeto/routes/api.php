@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ServicoController;
 use App\Http\Controllers\Api\ProdutoController;
 use App\Http\Controllers\Api\AvaliacaoController;
+use App\Http\Controllers\Api\UsuarioController;
 
 //rotas Publicas
 
@@ -27,6 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
     Route::post('/avaliacoes/{tipo}/{id}', [AvaliacaoController::class, 'store']);
+
+    Route::apiResource('usuarios', UsuarioController::class);
+    Route::post('usuarios/{id}/foto', [UsuarioController::class, 'uploadFoto']);
 });
 
 });
