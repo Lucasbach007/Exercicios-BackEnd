@@ -2,14 +2,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Servicos;
+use App\Models\Servico;
 use Illuminate\Http\Request;
 
 class ServicoController extends Controller
 {
     public function index()
     {
-        return response()->json(Servicos::all());
+        return response()->json(Servico::all());
     }
 
     public function store(Request $request)
@@ -20,17 +20,17 @@ class ServicoController extends Controller
             'preco' => 'required|numeric|min:0'
         ]);
 
-        $servico = Servicos::create($data);
+        $servico = Servico::create($data);
 
         return response()->json($servico, 201);
     }
 
-    public function show(Servicos $servico)
+    public function show(Servico $servico)
     {
         return response()->json($servico);
     }
 
-    public function update(Request $request, Servicos $servico)
+    public function update(Request $request, Servico $servico)
     {
         $data = $request->validate([
             'nome' => 'sometimes|required|string|max:255',
@@ -43,7 +43,7 @@ class ServicoController extends Controller
         return response()->json($servico);
     }
 
-    public function destroy(Servicos $servico)
+    public function destroy(Servico $servico)
     {
         $servico->delete();
 

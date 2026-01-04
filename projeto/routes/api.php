@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ServicoController;
 use App\Http\Controllers\Api\ProdutoController;
+use App\Http\Controllers\Api\AvaliacaoController;
 
 //rotas Publicas
 
@@ -23,4 +24,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('servicos', ServicoController::class);
     Route::apiResource('produtos', ProdutoController::class);
+
+    Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/avaliacoes/{tipo}/{id}', [AvaliacaoController::class, 'store']);
+});
+
 });

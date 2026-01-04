@@ -8,5 +8,11 @@ class Produto extends Model
 {
 
 protected $table= 'produtos';
-protected $fillable = ['id','nome_produto', 'descricao', 'preco'];
+protected $fillable = ['id','nome_produto', 'descricao', 'preco', 'imagem'];
+
+    public function avaliacoes()
+    {
+        return $this->morphMany(Avaliacao::class, 'avaliavel');
+    }
+
 }

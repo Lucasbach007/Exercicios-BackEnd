@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('servicos', function (Blueprint $table) {
             $table->id();
+            $table->string('nome');
+            $table->text('descricao')->nullable();
+            $table->decimal('preco', 8, 2);
+             $table->string('imagem')->nullable();
+             $table->integer('duracao_minutos')->default(60);
             $table->timestamps();
         });
     }

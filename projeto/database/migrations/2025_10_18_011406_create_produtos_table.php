@@ -18,6 +18,7 @@ protected $fillable = ['id','nome_produto', 'descricao', 'preco'];
             $table->string('nome_produto');
             $table->text('descricao')->nullable();
             $table->decimal('preco', 8, 2);
+            $table->string('imagem')->nullable();
             $table->timestamps();
         });
     }
