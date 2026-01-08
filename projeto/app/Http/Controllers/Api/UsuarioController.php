@@ -4,75 +4,62 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Model\Usuarios;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\User as Usuarios;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Usuarios::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $usuario = Usuarios::create($request->all());
-        return response()->json($usuario,201);
-         
-       
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-     return Usuarios::findorfail($id);
+        return response()->json($usuario, 201);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function show(string $id)
+    {
+        return Usuarios::findOrFail($id);
+    }
+
     public function update(Request $request, string $id)
     {
-        $usuario = Usuarios::findorfail($id);
+        $usuario = Usuarios::findOrFail($id);
         $usuario->update($request->all());
 
         return response()->json($usuario);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         Usuarios::findOrFail($id)->delete();
-        return response()->json(['message' => 'Este Usuario/a foi deletado']);
+        return response()->json(['message' => 'Usuário deletado']);
     }
 
-public function uploadFoto(Request $request, $id)
-{
-    $request->validate([
-        'foto' => 'required|image|max:2048'
-    ]);
+   
+    public function updateFoto(Request $request, $id)
+    {
+        $request->validate([
+            'foto' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
 
-    $usuario = Usuarios::findOrFail($id);
+        $user = Usuarios::findOrFail($id);
 
-    if ($usuario->foto) {
-        Storage::disk('public')->delete($usuario->foto);
+        if ($user->foto) {
+            Storage::disk('public')->delete($user->foto);
+        }
+
+        $path = $request->file('foto')->store('usuarios', 'public');
+
+        $user->foto = $path;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Foto atualizada com sucesso',
+            'foto' => asset('storage/' . $path),
+        ], 200);
     }
-
-    $path = $request->file('foto')->store('usuarios', 'public');
-
-    $usuario->foto = $path;
-    $usuario->save();
-
-    return response()->json($usuario);
-}
 }

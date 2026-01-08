@@ -22,7 +22,7 @@ class Profissional extends Model
 
     public function servicos()
 {
-    return $this->belongsToMany(Servicos::class, 'profissional_servico');
+    return $this->belongsToMany(Servico::class, 'profissional_servico');
 }
   public function agendamentos()
     {

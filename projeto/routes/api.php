@@ -29,8 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
     Route::post('/avaliacoes/{tipo}/{id}', [AvaliacaoController::class, 'store']);
 
-    Route::apiResource('usuarios', UsuarioController::class);
-    Route::post('usuarios/{id}/foto', [UsuarioController::class, 'uploadFoto']);
+   Route::post('/usuarios/{id}/foto', [UsuarioController::class, 'updateFoto'])
+  ->middleware('auth:sanctum');
 });
 
 });

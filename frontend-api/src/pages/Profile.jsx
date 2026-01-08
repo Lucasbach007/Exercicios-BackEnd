@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { updateUserFoto } from "../services/api";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -22,12 +23,14 @@ function Profile() {
     const formData = new FormData();
     formData.append("foto", foto);
 
-    const res = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/usuarios/${user.id}/foto`,
-      { method: "POST", body: formData }
-    );
+    await updateUserFoto(user.id, foto);
 
-    const updated = await res.json();
+    // const res = await fetch(
+    //   `${import.meta.env.VITE_API_BASE_URL}/usuarios/${user.id}/foto`,
+    //   { method: "POST", body: formData }
+    // );
+
+    // const updated = await res.json();
     setUser(updated);
     localStorage.setItem("user", JSON.stringify(updated));
   }
@@ -58,8 +61,8 @@ function Profile() {
         }
         width={150}
       />
-
-      <p><b>Nome:</b> {user.nome}</p>
+       
+      <p><b>Nome:</b> {user.name}</p>
       <p><b>Email:</b> {user.email}</p>
 
       <form onSubmit={uploadFoto}>

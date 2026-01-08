@@ -195,3 +195,22 @@ export async function logoutUser() {
 
   return true;
 }
+
+export async function updateUserFoto(userId, fotoFile) {
+  const formData = new FormData();
+  formData.append("foto", fotoFile);
+
+  const response = await fetch(`${API_URL}/usuarios/${userId}/foto`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      ...authHeaders()
+    },
+    body: formData
+  });
+
+  const result = await response.json();
+  if (!response.ok) throw result;
+
+  return result;
+}
