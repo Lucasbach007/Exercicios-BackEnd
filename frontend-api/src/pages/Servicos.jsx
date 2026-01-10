@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getServicos, deleteServico } from "../services/api";
+import ProcedureCard from "../components/ProcedureCard/ProcedureCard";
+import ScheduleModal from "../components/ScheduleModal/ScheduleModal";
 import "../styles/Servicos.css";
 function Servicos() {
   const [servicos, setServicos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedService, setSelectedService] = useState(null);
 
   useEffect(() => {
     async function carregar() {
@@ -30,43 +33,16 @@ function Servicos() {
       {loading && <p>Carregando...</p>}
 
       {!loading && servicos.length > 0 && (
-        <ul className="list-servicos">
+        <div className="servicos-grid">
           {servicos.map(s => (
-            <li key={s.id} className="servico-item">
-              {s.imagem && (
-                <img 
-                  src={s.imagem_url || `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}/storage/${s.imagem}`} 
-                  alt={s.nome} 
-                  className="servico-imagem"
-                  onError={(e) => { e.target.style.display = 'none'; }}
-                />
-              )}
-              <div className="servico-info">
-                <strong>{s.nome}</strong>
-                {s.descricao && <p>{s.descricao}</p>}
-                {s.preco && <p className="preco">R$ {Number(s.preco).toFixed(2)}</p>}
-                {s.duracao_minutos && <p className="duracao">{s.duracao_minutos} minutos</p>}
-              </div>
-              <div className="servico-actions">
-                <button
-                  className="btn-danger"
-                  onClick={async () => {
-                    if (!confirm('Confirma exclusão deste serviço?')) return;
-                    try {
-                      await deleteServico(s.id);
-                      setServicos(prev => prev.filter(x => x.id !== s.id));
-                    } catch (err) {
-                      alert(err?.message || 'Erro ao excluir');
-                    }
-                  }}
-                >Excluir</button>
-              </div>
-            </li>
+            <ProcedureCard key={s.id} procedure={s} onAgendar={(p)=>setSelectedService(p)} />
           ))}
-        </ul>
+        </div>
       )}
 
       {!loading && servicos.length === 0 && <p>Nenhum serviço encontrado.</p>}
+
+      <ScheduleModal procedure={selectedService} onClose={()=>setSelectedService(null)} />
     </div>
   );
 }

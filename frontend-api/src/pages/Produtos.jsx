@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getProdutos, deleteProduto } from "../services/api";
+import ProdCard from "../components/ProdsComps/ProdCard";
+import ProdModal from "../components/ProdsComps/ProdsModal";
 import "../styles/Produto.css";
 function Produtos() {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     async function carregar() {
@@ -30,42 +33,16 @@ function Produtos() {
       {loading && <p>Carregando...</p>}
 
       {!loading && produtos.length > 0 && (
-        <ul className="list-produtos">
+        <div className="produtos-grid">
           {produtos.map(p => (
-            <li key={p.id} className="produto-item">
-              {p.imagem && (
-                <img 
-                  src={p.imagem_url || `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}/storage/${p.imagem}`} 
-                  alt={p.nome} 
-                  className="produto-imagem"
-                  onError={(e) => { e.target.style.display = 'none'; }}
-                />
-              )}
-              <div className="produto-info">
-                <strong>{p.nome}</strong>
-                {p.descricao && <p>{p.descricao}</p>}
-                {p.preco && <p className="preco">R$ {Number(p.preco).toFixed(2)}</p>}
-              </div>
-              <div className="produto-actions">
-                <button
-                  className="btn-danger"
-                  onClick={async () => {
-                    if (!confirm('Confirma exclusão deste produto?')) return;
-                    try {
-                      await deleteProduto(p.id);
-                      setProdutos(prev => prev.filter(x => x.id !== p.id));
-                    } catch (err) {
-                      alert(err?.message || 'Erro ao excluir');
-                    }
-                  }}
-                >Excluir</button>
-              </div>
-            </li>
+            <ProdCard key={p.id} product={p} onComprar={(prod)=>setSelectedProduct(prod)} />
           ))}
-        </ul>
+        </div>
       )}
 
       {!loading && produtos.length === 0 && <p>Nenhum produto encontrado.</p>}
+
+      <ProdModal product={selectedProduct} onClose={()=>setSelectedProduct(null)} />
     </div>
   );
 }

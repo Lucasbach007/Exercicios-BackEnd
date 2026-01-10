@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
   async function logout() {
     if (token) {
       try {
-        await logoutUser(token);
+        await logoutUser();
       } catch (e) {
         console.error(e);
       }
