@@ -5,13 +5,23 @@ import api from "./axios";
 ======================= */
 
 export async function registerUser(data) {
-  const response = await api.post("/register", data);
-  return response.data;
+  try {
+    const response = await api.post("/register", data);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) throw err.response.data;
+    throw err;
+  }
 }
 
 export async function loginUser(data) {
-  const response = await api.post("/login", data);
-  return response.data;
+  try {
+    const response = await api.post("/login", data);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) throw err.response.data;
+    throw err;
+  }
 }
 
 export async function logoutUser() {

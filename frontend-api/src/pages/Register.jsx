@@ -39,7 +39,15 @@ function Register() {
 
       navigate("/login"); // ou /home
     } catch (err) {
-      setError(err.message || "Erro ao cadastrar");
+      // err pode ser o objeto enviado pelo backend (422) com 'errors' ou 'message'
+      if (err && err.errors) {
+        const messages = Object.values(err.errors).flat().join(" \n");
+        setError(messages);
+      } else if (err && err.message) {
+        setError(err.message);
+      } else {
+        setError("Erro ao cadastrar");
+      }
     } finally {
       setLoading(false);
     }
