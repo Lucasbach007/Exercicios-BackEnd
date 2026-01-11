@@ -8,10 +8,13 @@ const resolveImageSrc = (imgPath) => {
 };
 
 const ProdCard = ({ product, onComprar }) => {
-  const imageSrc = resolveImageSrc(product.imagem_url || product.imagem || product.image || '');
+  const resolved = product.imagem_url || product.imagem || product.image || '';
+  const imageSrc = resolveImageSrc(resolved);
+
+  const PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='100%' height='100%' fill='%23e5e7eb'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-family='Arial' font-size='20'>Sem imagem</text></svg>";
   return (
     <div className="product-card">
-      <img src={imageSrc} alt={product.nome} className="product-image" onError={(e)=>{e.target.style.display='none'}} />
+      <img src={imageSrc || PLACEHOLDER} alt={product.nome} className="product-image" onError={(e)=>{ if (e.target.src !== PLACEHOLDER) e.target.src = PLACEHOLDER }} />
       <div className="product-content">
         <div>
           <h3 className="product-title">{product.nome}</h3>

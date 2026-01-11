@@ -10,16 +10,21 @@ const resolveImageSrc = (imgPath) => {
 
 // Supondo que a estrutura da procedure seja: {id, nome, descricao, imagem}
 const ProcedureCard = ({ procedure, onAgendar }) => {
-  const imageSrc = resolveImageSrc(procedure.imagem_url || procedure.imagem || procedure.imagemUrl || procedure.image || '');
+  const resolved = procedure.imagem_url || procedure.imagem || procedure.imagemUrl || procedure.image || '';
+  const imageSrc = resolveImageSrc(resolved);
+
+  const PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='100%' height='100%' fill='%23e5e7eb'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-family='Arial' font-size='20'>Sem imagem</text></svg>";
   return (
     <div className="procedure-card">
       
       {/* Imagem */}
-      <img 
-        src={imageSrc} 
+      <img
+        src={imageSrc || PLACEHOLDER}
         alt={procedure.nome}
         className="procedure-image"
-        onError={(e) => { e.target.style.display = 'none'; }}
+        onError={(e) => {
+          if (e.target.src !== PLACEHOLDER) e.target.src = PLACEHOLDER;
+        }}
       />
       
       {/* Conteúdo */}
