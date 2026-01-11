@@ -41,16 +41,24 @@ function Profile() {
 
   return (
     <div>
-      <img
-        src={
-          user.foto
-            ? `${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}/storage/${user.foto}`
-            : "/avatar.png"
-        }
-        width={150}
-      />
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+        <img
+          src={
+            user.foto
+              ? `${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}/storage/${user.foto}`
+              : "/avatar.png"
+          }
+          width={150}
+          alt={user.name || user.nome || 'Avatar'}
+          onError={(e) => { e.target.src = '/avatar.png'; }}
+        />
 
-      <input type="file" onChange={handleUploadFoto} />
+        <div>
+          <h2>{user.name || user.nome}</h2>
+          <p>{user.email}</p>
+          <input type="file" onChange={handleUploadFoto} />
+        </div>
+      </div>
     </div>
   );
 }
