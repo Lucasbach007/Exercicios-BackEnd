@@ -1,8 +1,16 @@
 import React from 'react';
 import './ProcedureCard.css';
-// Supondo que a estrutura da procedure seja: {id, nome, descricao, imagemUrl}
+
+const resolveImageSrc = (imgPath) => {
+  if (!imgPath) return '';
+  if (imgPath.startsWith('http') || imgPath.startsWith('//')) return imgPath;
+  const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/api\/?$/i, '') || window.location.origin;
+  return `${apiBase}/storage/${imgPath}`;
+};
+
+// Supondo que a estrutura da procedure seja: {id, nome, descricao, imagem}
 const ProcedureCard = ({ procedure, onAgendar }) => {
-  const imageSrc = procedure.imagem_url || procedure.imagem || procedure.imagemUrl || procedure.image || '';
+  const imageSrc = resolveImageSrc(procedure.imagem_url || procedure.imagem || procedure.imagemUrl || procedure.image || '');
   return (
     <div className="procedure-card">
       
