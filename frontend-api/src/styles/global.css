@@ -13,8 +13,8 @@ html {
 
 body {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #f7f8fa;
-  color: #333;
+  background: linear-gradient(180deg, #000000 0%, #0b0b0b 100%);
+  color: #f3f4f6;
   line-height: 1.6;
 }
 
@@ -22,9 +22,9 @@ body {
    VARIÁVEIS GLOBAIS
 ============================== */
 :root {
-  --primary: #6c63ff;
-  --primary-hover: #584fe0;
-  --secondary: #ff6584;
+  --primary: #0ea5a4; /* teal for inputs/borders */
+  --primary-hover: #0b948f;
+  --secondary: #c81d63; /* magenta for primary buttons */
 
   --success: #2ecc71;
   --danger: #e74c3c;
@@ -143,6 +143,67 @@ select:focus {
   max-width: 1200px;
   margin: auto;
   padding: 0 16px;
+}
+
+/* ==========================
+   AUTH LAYOUT (centralizado)
+   ========================== */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: 380px;
+  background: var(--white);
+  color: #111827;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+  text-align: center;
+}
+
+.form-login h1, .auth-card h1 {
+  margin-bottom: 12px;
+}
+
+.form-login input {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 2px solid rgba(14,165,164,0.15);
+  margin-bottom: 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-login input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 6px 18px rgba(14,165,164,0.12);
+}
+
+.form-login button {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--secondary);
+  color: var(--white);
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8px 20px rgba(200,29,99,0.18);
+}
+
+.text-muted-light {
+  color: #6b7280;
+}
+
+/* make cards/content centered */
+.container .card, .container .auth-card {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .text-center {

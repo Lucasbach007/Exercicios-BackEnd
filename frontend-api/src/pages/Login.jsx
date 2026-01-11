@@ -23,32 +23,36 @@ function Login() {
   }
 
   return (
-    <div className="container">
-      <form onSubmit={handleLogin} className="form-login">
-        <h1>Login</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <form onSubmit={handleLogin} className="form-login">
+          <h1>Login</h1>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+          {error && <div className="alert alert-danger">{error}</div>}
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
+          <button type="submit" disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+
+          <p className="text-muted-light mt-2">Ou entre com suas redes sociais</p>
+        </form>
+      </div>
     </div>
   );
 }
