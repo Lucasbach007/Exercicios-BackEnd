@@ -50,23 +50,60 @@ export async function getServicos() {
 }
 
 export async function createServico(data) {
-  if (data.imagem instanceof File) {
-    const formData = new FormData();
-    formData.append("nome", data.nome);
-    formData.append("descricao", data.descricao || "");
-    formData.append("preco", data.preco);
-    formData.append("duracao_minutos", data.duracao_minutos || "");
-    formData.append("imagem", data.imagem);
+  try {
+    if (data.imagem instanceof File) {
+      const formData = new FormData();
+      formData.append("nome", data.nome);
+      formData.append("descricao", data.descricao || "");
+      formData.append("preco", data.preco);
+      formData.append("duracao_minutos", data.duracao_minutos || "");
+      formData.append("imagem", data.imagem);
 
-    const response = await api.post("/servicos", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      const response = await api.post("/servicos", formData);
 
+      return response.data;
+    }
+
+    const response = await api.post("/servicos", data);
     return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) throw err.response.data;
+    throw err;
   }
+}
 
-  const response = await api.post("/servicos", data);
+/* =======================
+   PRODUTOS
+======================= */
+
+export async function getProdutos() {
+  const response = await api.get("/produtos");
+  return response.data;
+}
+
+export async function createProduto(data) {
+  try {
+    if (data.imagem instanceof File) {
+      const formData = new FormData();
+      formData.append("nome", data.nome);
+      formData.append("descricao", data.descricao || "");
+      formData.append("preco", data.preco);
+      formData.append("estoque", data.estoque || 0);
+      formData.append("imagem", data.imagem);
+
+      const response = await api.post("/produtos", formData);
+      return response.data;
+    }
+
+    const response = await api.post("/produtos", data);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) throw err.response.data;
+    throw err;
+  }
+}
+
+export async function deleteProduto(produtoId) {
+  const response = await api.delete(`/produtos/${produtoId}`);
   return response.data;
 }

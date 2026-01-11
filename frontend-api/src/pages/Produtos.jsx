@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { getProdutos, deleteProduto } from "../services/api";
 import ProdCard from "../components/ProdsComps/ProdCard";
 import ProdModal from "../components/ProdsComps/ProdsModal";
+import SearchBarprodutos from "../components/Sherachbarprodutos";
 import "../styles/Produto.css";
 function Produtos() {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     async function carregar() {
@@ -25,6 +27,17 @@ function Produtos() {
     carregar();
   }, []);
 
+  const handleSearchChange = (e) => setSearchValue(e.target.value);
+
+  const filteredProdutos = produtos.filter((p) => {
+    const term = searchValue.trim().toLowerCase();
+    if (!term) return true;
+    return (
+      (p.nome && p.nome.toLowerCase().includes(term)) ||
+      (p.descricao && p.descricao.toLowerCase().includes(term))
+    );
+  });
+
   return (
     <div className="container">
       <h1>Produtos</h1>
@@ -32,15 +45,17 @@ function Produtos() {
       {error && <div className="alert alert-danger">{error}</div>}
       {loading && <p>Carregando...</p>}
 
-      {!loading && produtos.length > 0 && (
+      <SearchBarprodutos value={searchValue} onChange={handleSearchChange} />
+
+      {!loading && filteredProdutos.length > 0 && (
         <div className="produtos-grid">
-          {produtos.map(p => (
-            <ProdCard key={p.id} product={p} onComprar={(prod)=>setSelectedProduct(prod)} />
+          {filteredProdutos.map((p) => (
+            <ProdCard key={p.id} product={p} onComprar={(prod) => setSelectedProduct(prod)} />
           ))}
         </div>
       )}
 
-      {!loading && produtos.length === 0 && <p>Nenhum produto encontrado.</p>}
+      {!loading && filteredProdutos.length === 0 && <p>Nenhum produto encontrado.</p>}
 
       <ProdModal product={selectedProduct} onClose={()=>setSelectedProduct(null)} />
     </div>
