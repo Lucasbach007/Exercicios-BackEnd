@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { getProdutos, deleteProduto } from "../services/api";
+import ProdCard from "../components/ProdsComps/ProdCard";
+import ProdModal from "../components/ProdsComps/ProdsModal";
+import SearchBarprodutos from "../components/Sherachbarprodutos";
 import "../styles/Produto.css";
 function Produtos() {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     async function carregar() {
@@ -22,6 +27,17 @@ function Produtos() {
     carregar();
   }, []);
 
+  const handleSearchChange = (e) => setSearchValue(e.target.value);
+
+  const filteredProdutos = produtos.filter((p) => {
+    const term = searchValue.trim().toLowerCase();
+    if (!term) return true;
+    return (
+      (p.nome && p.nome.toLowerCase().includes(term)) ||
+      (p.descricao && p.descricao.toLowerCase().includes(term))
+    );
+  });
+
   return (
     <div className="container">
       <h1>Produtos</h1>
@@ -29,43 +45,19 @@ function Produtos() {
       {error && <div className="alert alert-danger">{error}</div>}
       {loading && <p>Carregando...</p>}
 
-      {!loading && produtos.length > 0 && (
-        <ul className="list-produtos">
-          {produtos.map(p => (
-            <li key={p.id} className="produto-item">
-              {p.imagem && (
-                <img 
-                  src={p.imagem_url || `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}/storage/${p.imagem}`} 
-                  alt={p.nome} 
-                  className="produto-imagem"
-                  onError={(e) => { e.target.style.display = 'none'; }}
-                />
-              )}
-              <div className="produto-info">
-                <strong>{p.nome}</strong>
-                {p.descricao && <p>{p.descricao}</p>}
-                {p.preco && <p className="preco">R$ {Number(p.preco).toFixed(2)}</p>}
-              </div>
-              <div className="produto-actions">
-                <button
-                  className="btn-danger"
-                  onClick={async () => {
-                    if (!confirm('Confirma exclusão deste produto?')) return;
-                    try {
-                      await deleteProduto(p.id);
-                      setProdutos(prev => prev.filter(x => x.id !== p.id));
-                    } catch (err) {
-                      alert(err?.message || 'Erro ao excluir');
-                    }
-                  }}
-                >Excluir</button>
-              </div>
-            </li>
+      <SearchBarprodutos value={searchValue} onChange={handleSearchChange} />
+
+      {!loading && filteredProdutos.length > 0 && (
+        <div className="produtos-grid">
+          {filteredProdutos.map((p) => (
+            <ProdCard key={p.id} product={p} onComprar={(prod) => setSelectedProduct(prod)} />
           ))}
-        </ul>
+        </div>
       )}
 
-      {!loading && produtos.length === 0 && <p>Nenhum produto encontrado.</p>}
+      {!loading && filteredProdutos.length === 0 && <p>Nenhum produto encontrado.</p>}
+
+      <ProdModal product={selectedProduct} onClose={()=>setSelectedProduct(null)} />
     </div>
   );
 }

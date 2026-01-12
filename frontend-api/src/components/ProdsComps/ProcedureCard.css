@@ -1,0 +1,46 @@
+.procedure-card {
+  background: #ffffff;
+  color: #000000;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 280px;
+  text-align: center;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.procedure-card:hover {
+  transform: scale(1.03);
+}
+
+.procedure-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.procedure-info {
+  padding: 17px;
+}
+
+.price {
+  color: #d40066;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+button {
+  background-color: #ff0077;
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background-color: #d40066;
+}

@@ -1,0 +1,140 @@
+/* ======== SEARCHBAR PRODUTOS COMPONENT ======== */
+.searchbar-produtos-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.searchbar-produtos-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.searchbar-produtos-input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border: 1px solid var(--gray-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: var(--white);
+}
+
+.searchbar-produtos-input:focus {
+  outline: none;
+  border-color: var(--blue-light);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchbar-produtos-input::placeholder {
+  color: var(--gray-text);
+}
+
+.searchbar-produtos-icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-text);
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.searchbar-produtos-clear {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gray-text);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.3rem;
+  transition: color 0.2s ease;
+}
+
+.searchbar-produtos-clear:hover {
+  color: var(--blue-primary);
+}
+
+/* ======== FILTER OPTIONS ======== */
+.searchbar-produtos-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-border);
+  background: var(--white);
+  color: var(--gray-text);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.filter-button:hover {
+  border-color: var(--blue-light);
+  color: var(--blue-primary);
+}
+
+.filter-button.active {
+  background: var(--blue-light);
+  color: var(--white);
+  border-color: var(--blue-light);
+}
+
+/* ======== SEARCH STATS ======== */
+.searchbar-produtos-stats {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--gray-text);
+}
+
+.searchbar-produtos-stats strong {
+  color: var(--blue-primary);
+  font-weight: 600;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 768px) {
+  .searchbar-produtos-container {
+    max-width: 100%;
+  }
+
+  .searchbar-produtos-input {
+    font-size: 1rem;
+  }
+
+  .searchbar-produtos-filters {
+    gap: 0.3rem;
+  }
+
+  .filter-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchbar-produtos-wrapper {
+    margin-bottom: 1rem;
+  }
+
+  .searchbar-produtos-filters {
+    gap: 0.25rem;
+  }
+
+  .filter-button {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}

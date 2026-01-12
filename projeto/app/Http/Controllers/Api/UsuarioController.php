@@ -40,26 +40,28 @@ class UsuarioController extends Controller
     }
 
    
-    public function updateFoto(Request $request, $id)
-    {
-        $request->validate([
-            'foto' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+public function updateFoto(Request $request, $id)
+{
+    $request->validate([
+        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
 
-        $user = Usuarios::findOrFail($id);
+    $usuario = Usuarios::findOrFail($id);
 
-        if ($user->foto) {
-            Storage::disk('public')->delete($user->foto);
-        }
-
-        $path = $request->file('foto')->store('usuarios', 'public');
-
-        $user->foto = $path;
-        $user->save();
-
-        return response()->json([
-            'message' => 'Foto atualizada com sucesso',
-            'foto' => asset('storage/' . $path),
-        ], 200);
+    // Apagar foto antiga
+    if ($usuario->foto && Storage::disk('public')->exists($usuario->foto)) {
+        Storage::disk('public')->delete($usuario->foto);
     }
+
+    // Salvar nova foto
+    $path = $request->file('foto')->store('usuarios', 'public');
+
+    $usuario->foto = $path;
+    $usuario->save();
+
+    return response()->json([
+        'message' => 'Foto atualizada com sucesso',
+        'foto_url' => asset('storage/' . $path)
+    ]);
+}
 }

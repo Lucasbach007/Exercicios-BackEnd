@@ -39,55 +39,65 @@ function Register() {
 
       navigate("/login"); // ou /home
     } catch (err) {
-      setError(err.message || "Erro ao cadastrar");
+      // err pode ser o objeto enviado pelo backend (422) com 'errors' ou 'message'
+      if (err && err.errors) {
+        const messages = Object.values(err.errors).flat().join(" \n");
+        setError(messages);
+      } else if (err && err.message) {
+        setError(err.message);
+      } else {
+        setError("Erro ao cadastrar");
+      }
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div>
-      <h2>Cadastro</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2>Cadastro</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Nome"
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit} className="form-login">
+          <input
+            type="text"
+            name="name"
+            placeholder="Nome"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Senha"
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="password"
+            name="password"
+            placeholder="Senha"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          name="password_confirmation"
-          placeholder="Confirmar senha"
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="password"
+            name="password_confirmation"
+            placeholder="Confirmar senha"
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Cadastrando..." : "Cadastrar"}
-        </button>
-      </form>
+          <button type="submit" disabled={loading}>
+            {loading ? "Cadastrando..." : "Cadastrar"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

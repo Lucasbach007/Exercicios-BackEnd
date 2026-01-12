@@ -16,21 +16,25 @@ Route::post('/teste', function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-//Rotas Protegidas com Sanctum
+// Rotas públicas (listagem e visualização)
+Route::get('/servicos', [ServicoController::class, 'index']);
+Route::get('/servicos/{servico}', [ServicoController::class, 'show']);
 
+Route::get('/produtos', [ProdutoController::class, 'index']);
+Route::get('/produtos/{produto}', [ProdutoController::class, 'show']);
+
+// Rotas Protegidas com Sanctum (criação/atualização/remoção e rotas de usuário)
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/me', [AuthController::class, 'me']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::apiResource('servicos', ServicoController::class);
-    Route::apiResource('produtos', ProdutoController::class);
+        // proteger apenas as ações de escrita
+        Route::apiResource('servicos', ServicoController::class)->except(['index', 'show']);
+        Route::apiResource('produtos', ProdutoController::class)->except(['index', 'show']);
 
-    Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/avaliacoes/{tipo}/{id}', [AvaliacaoController::class, 'store']);
+        Route::post('/avaliacoes/{tipo}/{id}', [AvaliacaoController::class, 'store']);
 
-   Route::post('/usuarios/{id}/foto', [UsuarioController::class, 'updateFoto'])
-  ->middleware('auth:sanctum');
-});
+     Route::post('/usuarios/{id}/foto', [UsuarioController::class, 'updateFoto']);
 
 });
